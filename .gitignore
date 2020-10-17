@@ -25,9 +25,6 @@ coverage
 # nyc test coverage
 .nyc_output
 
-# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
-
 # Bower dependency directory (https://bower.io/)
 bower_components
 
@@ -40,6 +37,8 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
+/.pnp
+.pnp.js
 
 # TypeScript v1 declaration files
 typings/
@@ -88,17 +87,24 @@ dist
 # https://nextjs.org/blog/next-9-1#public-directory-support
 # public
 
-# vuepress build output
-.vuepress/dist
 
-# Serverless directories
-.serverless/
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# FuseBox cache
-.fusebox/
+# testing
+/coverage
 
-# DynamoDB Local files
-.dynamodb/
+# production
+/build
 
-# TernJS port file
-.tern-port
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+.idea/
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
