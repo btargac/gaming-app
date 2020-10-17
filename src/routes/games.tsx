@@ -1,6 +1,21 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { logout, selectAuth } from '../store/slices/authSlice';
 
 const Games: React.FC = () =>{
+  const dispatch = useDispatch();
+  const { player } = useSelector(selectAuth);
+
+  const logoutHandler = () => {
+    if (player) {
+      const nameRegex =/^(\w+)/i;
+      const name = player.name.match(nameRegex)?.[0].toLowerCase() ?? '';
+
+      dispatch(logout({username: name}));
+    }
+  }
+
   return (
     <div className="casino">
       <div className="ui grid centered">
@@ -19,7 +34,7 @@ const Games: React.FC = () =>{
             {/*end player item template*/}
 
           </div>
-          <div className="logout ui left floated secondary button inverted">
+          <div className="logout ui left floated secondary button inverted" onClick={logoutHandler}>
             <i className="left chevron icon"/>Log Out
           </div>
         </div>

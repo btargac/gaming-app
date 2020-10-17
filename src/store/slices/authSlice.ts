@@ -25,7 +25,7 @@ const initialState: AuthState = {
 
 interface AuthData {
   status: string;
-  player: Player;
+  player?: Player;
 }
 
 interface AuthError {
@@ -119,7 +119,9 @@ export const authSlice = createSlice({
     builder.addCase(login.fulfilled, (state, action) => {
       if (state.loading === 'pending') {
         state.loading = 'idle';
-        state.player = action.payload.player;
+        if (action.payload.player) {
+          state.player = action.payload.player;
+        }
         state.isAuthenticated = true;
       }
     })
