@@ -24,16 +24,14 @@ jobs:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: heroku container:login
 
-      # Build Docker image and push for both mock api and client side web app
-      - name: Build and push to containers
+      # Build Docker image and push for web app
+      - name: Build and push web app
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: |
-          heroku container:push -a gaming-app-demo
+        run: heroku container:push -a gaming-app-demo web
 
-      # Release the artifact
-      - name: Release Gaming App
+      # Release the artifact for web app
+      - name: Release web app
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: |
-          heroku container:release -a gaming-app-demo
+        run: heroku container:release -a gaming-app-demo web
