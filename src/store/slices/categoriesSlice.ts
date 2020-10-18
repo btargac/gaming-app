@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../';
 
 const categoriesEndpoint: string = `${process.env.REACT_APP_API_BASE_URL}/categories` || 'http://localhost:3001/categories';
@@ -11,11 +11,13 @@ interface Category {
 interface CategorySliceState {
   data: Category[];
   loading: 'idle' | 'pending';
+  selectedCategory: number;
 }
 
 const initialState: CategorySliceState = {
   data: [],
   loading: 'idle',
+  selectedCategory: 0
 };
 
 type CategoryData = Category[];
@@ -31,7 +33,11 @@ export const fetchCategories = createAsyncThunk(
 export const categoriesSlice = createSlice({
   name: 'categories',
   initialState,
-  reducers: {},
+  reducers: {
+    selectCategory: (state, action: PayloadAction<number>) => {
+      state.selectedCategory = action.payload
+    }
+  },
   extraReducers: builder => {
     builder.addCase(fetchCategories.pending, state => {
       if (state.loading === 'idle') {
@@ -53,7 +59,9 @@ export const categoriesSlice = createSlice({
   },
 });
 
+export const { selectCategory } = categoriesSlice.actions;
 export const selectCategories = (state: RootState): Category[] => state.categories.data;
+export const selectedCategory = (state: RootState): number => state.categories.selectedCategory;
 export const selectLoading = (state: RootState): string => state.categories.loading;
 
 export default categoriesSlice.reducer;
