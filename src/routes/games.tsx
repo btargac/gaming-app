@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import cx from 'classnames';
 
+import GameDetail from '../components/GameDetail';
+import GameList from '../components/GameList';
 import { logout, selectAuth } from '../store/slices/authSlice';
 import { fetchCategories, selectCategory, selectedCategory, selectCategories } from '../store/slices/categoriesSlice';
-import { fetchGames, selectGames } from '../store/slices/gamesSlice';
+import { Game, fetchGames, selectGames } from '../store/slices/gamesSlice';
 
 const Games: React.FC = () => {
   const [ searchTerm, setSearchTerm ] = useState('');
@@ -15,6 +17,7 @@ const Games: React.FC = () => {
   const activeCategory = useSelector(selectedCategory);
   const games = useSelector(selectGames);
   const history = useHistory();
+  let { game } = useParams() as {game: string};
 
   const logoutHandler = () => {
     if (player) {
@@ -47,40 +50,16 @@ const Games: React.FC = () => {
     dispatch(fetchGames());
   },[isAuthenticated, history, dispatch])
 
-  const gameList = useMemo(() => {
+  const filteredGameList: Game[] = useMemo(() => {
     const loweredSearchTerm = searchTerm.toLowerCase();
     // filter games for both searchTerm and activeCategory
-    const filteredGames = (searchTerm
+    return (searchTerm
       ? games.filter(
         game =>
           game.name.toLowerCase().includes(loweredSearchTerm)
           || game.description.toLowerCase().includes(loweredSearchTerm)
       ) : games).filter(game => game.categoryIds.includes(activeCategory));
-
-    return(
-      <div className="ui relaxed divided game items links">
-        {
-          filteredGames
-            .map(game => (
-              <div className="game item" key={game.code}>
-                <div className="ui small image">
-                  <img src={`/${game.icon}`} alt="game-icon"/>
-                </div>
-                <div className="content">
-                  <div className="header"><strong className="name">{game.name}</strong></div>
-                  <div className="description">{game.description}</div>
-                  <div className="extra">
-                    <div className="play ui right floated secondary button inverted" onClick={() => playHandler(game.code)}>
-                      Play
-                      <i className="right chevron icon"/>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))
-        }
-      </div>)
-  }, [games, playHandler, activeCategory, searchTerm])
+  }, [games, activeCategory, searchTerm])
 
   const categoryList = useMemo(() => (
     <div className="ui selection animated list category items">
@@ -130,17 +109,15 @@ const Games: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="ui grid">
-        <div className="twelve wide column">
-          <h3 className="ui dividing header">Games</h3>
-          {gameList}
+      {game ? <GameDetail game={game}/> : (
+        <div className="ui grid">
+          <GameList games={filteredGameList} playHandler={playHandler}/>
+          <div className="four wide column">
+            <h3 className="ui dividing header">Categories</h3>
+            {categoryList}
+          </div>
         </div>
-        <div className="four wide column">
-          <h3 className="ui dividing header">Categories</h3>
-          {categoryList}
-        </div>
-      </div>
-
+      )}
     </div>
   );
 }

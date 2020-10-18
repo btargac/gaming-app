@@ -3,7 +3,7 @@ import { RootState } from '../';
 
 const gameListEndpoint: string = `${process.env.REACT_APP_API_BASE_URL}/games` || 'http://localhost:3001/games';
 
-interface Game {
+export interface Game {
   categoryIds: number[];
   code: string;
   description: string;

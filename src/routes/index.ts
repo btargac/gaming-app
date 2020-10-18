@@ -13,7 +13,7 @@ export interface Route {
 
 export const routes: Route[] = [
   {
-    path: '/games/:gameId?',
+    path: '/games/:game?',
     exact: true,
     component: GamesComponent,
     protected: true
