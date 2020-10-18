@@ -3,8 +3,16 @@ import { RootState } from '../';
 
 const gameListEndpoint: string = `${process.env.REACT_APP_API_BASE_URL}/games` || 'http://localhost:3001/games';
 
+interface Game {
+  categoryIds: number[];
+  code: string;
+  description: string;
+  icon: string;
+  name: string;
+}
+
 interface GamesState {
-  data: any[];
+  data: Game[];
   loading: 'idle' | 'pending';
 }
 
@@ -13,9 +21,7 @@ const initialState: GamesState = {
   loading: 'idle',
 };
 
-interface GamesData {
-  data: any[];
-}
+type GamesData = any[];
 
 export const fetchGames = createAsyncThunk(
   'games/fetchGames',
@@ -38,7 +44,7 @@ export const gamesSlice = createSlice({
       builder.addCase(fetchGames.fulfilled, (state, action) => {
       if (state.loading === 'pending') {
         state.loading = 'idle';
-        state.data = action.payload.data;
+        state.data = action.payload;
       }
     })
     builder.addCase(fetchGames.rejected, (state, action) => {
@@ -50,7 +56,7 @@ export const gamesSlice = createSlice({
   },
 });
 
-export const selectGames = (state: RootState): any[] => state.games.data;
+export const selectGames = (state: RootState): Game[] => state.games.data;
 export const selectLoading = (state: RootState): string => state.games.loading;
 
 export default gamesSlice.reducer;
