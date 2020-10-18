@@ -130,6 +130,7 @@ export const authSlice = createSlice({
           localStorage.setItem('user', JSON.stringify(action.payload.player))
         }
         state.isAuthenticated = true;
+        state.error = '';
       }
     })
     builder.addCase(login.rejected, (state, action) => {

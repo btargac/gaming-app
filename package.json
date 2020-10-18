@@ -15,6 +15,7 @@
     "@types/react-dom": "^16.9.0",
     "@types/react-redux": "^7.1.7",
     "@types/react-router-dom": "^5.1.6",
+    "@types/yup": "^0.29.8",
     "classnames": "^2.2.6",
     "json-server": "^0.16.2",
     "react": "^16.14.0",
@@ -23,7 +24,8 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "semantic-ui-css": "^2.4.1",
-    "typescript": "^4.0.3"
+    "typescript": "^4.0.3",
+    "yup": "^0.29.3"
   },
   "scripts": {
     "start": "json-server --watch mock/mock-data.json --port 3001 --middlewares mock/mock-api.js & react-scripts start",

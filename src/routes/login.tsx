@@ -1,7 +1,9 @@
 import React, { MouseEvent, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import cx from 'classnames';
 
+import validateLoginForm from '../utils/validator';
 import { login, selectAuth } from '../store/slices/authSlice';
 
 const Login: React.FC = () => {
@@ -9,15 +11,32 @@ const Login: React.FC = () => {
     username: null,
     password: null
   });
+  const [formErrors, setFormErrors] = useState({
+    username: null,
+    password: null
+  });
   const dispatch = useDispatch();
   const { error, isAuthenticated } = useSelector(selectAuth);
   const history = useHistory();
 
-  const loginHandler = (e: MouseEvent<HTMLInputElement>) => {
+  const loginHandler = async (e: MouseEvent<HTMLInputElement>) => {
     e.preventDefault();
 
-    if(formData.username && formData.password) {
-      dispatch(login(formData));
+    try {
+      const validationResult = await validateLoginForm(formData);
+
+      if(validationResult) {
+        dispatch(login(formData));
+      }
+    } catch (err) {
+      const flatErrors = err.inner.flatMap((inner: { path: string; }) => inner.path);
+
+      setFormErrors(oldData => ({
+        ...oldData,
+        ...flatErrors.reduce((prev: object, curr: string) => {
+          return {...prev, [curr]: true}
+        },  {})
+      }))
     }
   }
 
@@ -25,7 +44,12 @@ const Login: React.FC = () => {
     setFormData(oldData => ({
       ...oldData,
       [key]: value
-    }))
+    }));
+
+    setFormErrors(oldData => ({
+      ...oldData,
+      [key]: false
+    }));
   }
 
   useEffect(() => {
@@ -37,13 +61,10 @@ const Login: React.FC = () => {
   return (
     <div className="login">
       <div className="ui grid centered">
-        {error && <div className="fields">
-          {error}
-        </div>}
         <form>
           <div className="fields">
             <div className="required field">
-              <div className="ui icon input">
+              <div className={cx('ui icon input', {'error': formErrors.username})}>
                 <input
                   type="text"
                   name="username"
@@ -53,7 +74,7 @@ const Login: React.FC = () => {
               </div>
             </div>
             <div className="required field">
-              <div className="ui icon input">
+              <div className={cx('ui icon input', {'error': formErrors.password})}>
                 <input
                   type="password"
                   name="password"
@@ -68,6 +89,11 @@ const Login: React.FC = () => {
                   <i className="right chevron icon"/>
               </div>
             </div>
+            {error && <div className="ui error message">
+              <ul className="list">
+                <li>{error}</li>
+              </ul>
+            </div>}
           </div>
         </form>
       </div>
