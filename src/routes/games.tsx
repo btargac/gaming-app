@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
 
@@ -6,7 +6,7 @@ import { logout, selectAuth } from '../store/slices/authSlice';
 import { fetchCategories, selectCategories } from '../store/slices/categoriesSlice';
 import { fetchGames, selectGames } from '../store/slices/gamesSlice';
 
-const Games: React.FC = () =>{
+const Games: React.FC = () => {
   const dispatch = useDispatch();
   const { isAuthenticated, player } = useSelector(selectAuth);
   const categories = useSelector(selectCategories);
@@ -22,10 +22,10 @@ const Games: React.FC = () =>{
     }
   }
 
-  const playHandler = (code: string): void => {
+  const playHandler = useCallback((code: string): void => {
     // navigate to a relative path where game play is handled
     history.push(`/games/${code}`);
-  }
+  }, [history]);
 
   useEffect(() =>{
     if (!isAuthenticated) {
@@ -34,7 +34,7 @@ const Games: React.FC = () =>{
 
     dispatch(fetchCategories());
     dispatch(fetchGames());
-  },[isAuthenticated])
+  },[isAuthenticated, history, dispatch])
 
   const gameList = useMemo(() => {
     return(
@@ -58,7 +58,7 @@ const Games: React.FC = () =>{
             </div>
         ))}
       </div>)
-  }, [games])
+  }, [games, playHandler])
 
   const categoryList = useMemo(() => (
     <div className="ui selection animated list category items">

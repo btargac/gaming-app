@@ -21,7 +21,7 @@ const initialState: GamesState = {
   loading: 'idle',
 };
 
-type GamesData = any[];
+type GamesData = Game[];
 
 export const fetchGames = createAsyncThunk(
   'games/fetchGames',

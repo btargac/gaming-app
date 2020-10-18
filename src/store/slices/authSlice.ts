@@ -3,6 +3,10 @@ import {RootState} from '../';
 
 const authEndpoint: string = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
 
+// initialize the store with the one that persists on LocalStorage
+const storedPlayer: Player = localStorage.getItem('user')
+  ? JSON.parse(localStorage.getItem('user') as string) : null
+
 interface Player {
   name: string;
   avatar: string;
@@ -17,8 +21,8 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  player: null,
-  isAuthenticated: false,
+  player: storedPlayer,
+  isAuthenticated: !!storedPlayer,
   loading: 'idle',
   error: ''
 };
@@ -121,6 +125,9 @@ export const authSlice = createSlice({
         state.loading = 'idle';
         if (action.payload.player) {
           state.player = action.payload.player;
+
+          // store the user to persist on full page refreshes
+          localStorage.setItem('user', JSON.stringify(action.payload.player))
         }
         state.isAuthenticated = true;
       }
@@ -144,6 +151,9 @@ export const authSlice = createSlice({
         state.loading = 'idle';
         state.player = null;
         state.isAuthenticated = false;
+
+        // remove the stored user from localStorage
+        localStorage.removeItem('user')
       }
     })
     builder.addCase(logout.rejected, (state, action) => {
