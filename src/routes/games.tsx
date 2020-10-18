@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import cx from 'classnames';
@@ -8,6 +8,7 @@ import { fetchCategories, selectCategory, selectedCategory, selectCategories } f
 import { fetchGames, selectGames } from '../store/slices/gamesSlice';
 
 const Games: React.FC = () => {
+  const [ searchTerm, setSearchTerm ] = useState('');
   const dispatch = useDispatch();
   const { isAuthenticated, player } = useSelector(selectAuth);
   const categories = useSelector(selectCategories);
@@ -23,6 +24,10 @@ const Games: React.FC = () => {
       dispatch(logout({username: name}));
     }
   }
+
+  const searchHandler = useCallback(evt => {
+    setSearchTerm(evt.target.value);
+  }, [])
 
   const categoryChangeHandler = useCallback((categoryId: number) => {
     dispatch(selectCategory(categoryId));
@@ -43,10 +48,19 @@ const Games: React.FC = () => {
   },[isAuthenticated, history, dispatch])
 
   const gameList = useMemo(() => {
+    const loweredSearchTerm = searchTerm.toLowerCase();
+    // filter games for both searchTerm and activeCategory
+    const filteredGames = (searchTerm
+      ? games.filter(
+        game =>
+          game.name.toLowerCase().includes(loweredSearchTerm)
+          || game.description.toLowerCase().includes(loweredSearchTerm)
+      ) : games).filter(game => game.categoryIds.includes(activeCategory));
+
     return(
       <div className="ui relaxed divided game items links">
         {
-          games.filter(game => game.categoryIds.includes(activeCategory))
+          filteredGames
             .map(game => (
               <div className="game item" key={game.code}>
                 <div className="ui small image">
@@ -66,7 +80,7 @@ const Games: React.FC = () => {
             ))
         }
       </div>)
-  }, [games, playHandler, activeCategory])
+  }, [games, playHandler, activeCategory, searchTerm])
 
   const categoryList = useMemo(() => (
     <div className="ui selection animated list category items">
@@ -111,7 +125,7 @@ const Games: React.FC = () => {
         </div>
         <div className="four wide column">
           <div className="search ui small icon input ">
-            <input type="text" placeholder="Search Game"/>
+            <input type="text" placeholder="Search Game" onChange={searchHandler}/>
               <i className="search icon"/>
           </div>
         </div>
