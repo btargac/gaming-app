@@ -3,11 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
 
 import { logout, selectAuth } from '../store/slices/authSlice';
+import { fetchCategories, selectCategories } from '../store/slices/categoriesSlice';
 import { fetchGames, selectGames } from '../store/slices/gamesSlice';
 
 const Games: React.FC = () =>{
   const dispatch = useDispatch();
   const { isAuthenticated, player } = useSelector(selectAuth);
+  const categories = useSelector(selectCategories);
   const games = useSelector(selectGames);
   const history = useHistory();
 
@@ -30,6 +32,7 @@ const Games: React.FC = () =>{
       return history.push('/login');
     }
 
+    dispatch(fetchCategories());
     dispatch(fetchGames());
   },[isAuthenticated])
 
@@ -57,22 +60,35 @@ const Games: React.FC = () =>{
       </div>)
   }, [games])
 
+  const categoryList = useMemo(() => (
+    <div className="ui selection animated list category items">
+      {
+        categories.map(category => (
+          <div className="category item" key={category.id}>
+            <div className="content">
+              <div className="header">
+                {category.name}
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  ),[categories])
+
   return (
     <div className="casino">
       <div className="ui grid centered">
         <div className="twelve wide column">
           <div className="ui list">
 
-            {/*player item template*/}
             <div className="player item">
               <img className="ui avatar image" src={`/${player?.avatar}`} alt="avatar"/>
-
                 <div className="content">
                   <div className="header"><strong className="name">{player?.name}</strong></div>
                   <div className="description event">{player?.event}</div>
                 </div>
             </div>
-            {/*end player item template*/}
 
           </div>
           <div className="logout ui left floated secondary button inverted" onClick={logoutHandler}>
@@ -93,18 +109,7 @@ const Games: React.FC = () =>{
         </div>
         <div className="four wide column">
           <h3 className="ui dividing header">Categories</h3>
-
-          <div className="ui selection animated list category items">
-
-            {/*category item template*/}
-            <div className="category item">
-              <div className="content">
-                <div className="header"/>
-              </div>
-            </div>
-            {/*end category item template*/}
-
-          </div>
+          {categoryList}
         </div>
       </div>
 
