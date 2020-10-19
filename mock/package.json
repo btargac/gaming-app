@@ -9,6 +9,6 @@
     "json-server": "^0.16.2"
   },
   "scripts": {
-    "start": "json-server ./mock-data.json --port 3001 --middlewares ./mock-api.js"
+    "start": "json-server ./mock-data.json --port 3001 --middlewares ./mock-api.js --host 0.0.0.0"
   }
 }
