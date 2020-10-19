@@ -35,3 +35,19 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: heroku container:release -a gaming-app-demo web
+
+      # Build Docker image and push for mock API
+      - name: Build and push mock API
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          cd ./mock
+          heroku container:push -a gaming-app-mock-api web
+
+      # Release the artifact for API
+      - name: Release API
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          cd ./mock
+          heroku container:release -a gaming-app-mock-api web

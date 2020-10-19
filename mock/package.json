@@ -1,0 +1,14 @@
+{
+  "name": "mock",
+  "version": "1.0.0",
+  "description": "mock api",
+  "private": true,
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "json-server": "^0.16.2"
+  },
+  "scripts": {
+    "start": "json-server ./mock-data.json --port 3001 --middlewares ./mock-api.js"
+  }
+}

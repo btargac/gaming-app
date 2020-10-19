@@ -62,7 +62,7 @@ export const login = createAsyncThunk<AuthData,
         body: JSON.stringify(loginData)
       });
 
-      if (response.status === 400) {
+      if (response?.status === 400) {
         return rejectWithValue((await response.json()) as AuthError)
       }
 

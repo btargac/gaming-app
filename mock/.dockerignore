@@ -1,7 +1,6 @@
 .git
 .idea
 node_modules
-build
-mock
+dist
 README*.md
 npm-debug.log
