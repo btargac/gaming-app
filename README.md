@@ -33,7 +33,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 Builds the app for production to the `build` folder.<br />
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.<br />
+The build is minified, and the filenames include the hashes.<br />
 Your app is ready to be deployed!
 
 ## Available Scripts in mock folder
@@ -43,11 +43,12 @@ Starts the mock api that depends on the json-server module
 
 ## CI / CD - Deployment
 
-Deployments are running on Heroku containers, manually you can build push and release docker images but for this repository Github Actions makes our lives easier 👏
+Deployments are running on Heroku containers, manually you can build, push and release docker images but for this repository Github Actions makes our lives easier 👏<br />
 Workflows handle the process of delivering artifacts to Heroku Dynos.
 
 If you have speed luck with you then you should see the live version on
 [🚀live version on heroku](https://gaming-app-demo.herokuapp.com/)
-[🚀Mock api is running at](https://gaming-app-mock-api.herokuapp.com/)
+
+[🚀Mock api is running on Heroku](https://gaming-app-mock-api.herokuapp.com/)
 
 And don't forget since the Heroku Dyno is free it will be sleeping most of the time 💤

@@ -8,6 +8,6 @@ server.use(middlewares);
 server.use(jsonServer.bodyParser);
 server.use(customMiddlewares);
 server.use(router);
-server.listen(3001, () => {
+server.listen(process.env.PORT || 3001, () => {
   console.log('JSON Server is running');
 })
