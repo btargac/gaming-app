@@ -13,10 +13,11 @@ const RouteRenderer: React.FC<RouteWithSubRoutes> = (route) => {
   return (route.protected && isAuthenticated) || !route.protected ? (
     <Route
       path={route.path}
-      render={props => (
-        // pass the sub-routes down to keep nesting
-        <route.component {...props} routes={route.routes}/>
-      )}
+      render={props => {
+        const Component: React.FC<{routes: unknown}> = route.component;
+
+        return (<Component {...props} routes={route.routes}/>)
+      }}
     />
   ) : (<Redirect
     to={{
