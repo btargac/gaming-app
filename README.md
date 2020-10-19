@@ -3,6 +3,14 @@ A simple gaming web application
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
 
+A component based React app, created with CRA and RTK best practices, which differs from a standard Redux app with store creation,
+reducer function structure and built in Immer library that makes reducer functions immutable data flow seamless.
+
+App has two main routes,
+- Login Page
+- Games page
+    - Game Detail Page with route parameters
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -28,20 +36,18 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.<br />
 Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Available Scripts in mock folder
 
-### `yarn eject`
+#### `yarn start`
+Starts the mock api that depends on the json-server module
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## CI / CD - Deployment
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Deployments are running on Heroku containers, manually you can build push and release docker images but for this repository Github Actions makes our lives easier 👏
+Workflows handle the process of delivering artifacts to Heroku Dynos.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+If you have speed luck with you then you should see the live version on
+[🚀live version on heroku](https://gaming-app-demo.herokuapp.com/)
+[🚀Mock api is running at](https://gaming-app-mock-api.herokuapp.com/)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+And don't forget since the Heroku Dyno is free it will be sleeping most of the time 💤
