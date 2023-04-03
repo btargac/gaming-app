@@ -1,5 +1,6 @@
 import React, { MouseEvent, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { ValidationError } from 'yup';
 import { useHistory } from 'react-router-dom';
 import cx from 'classnames';
 
@@ -29,7 +30,7 @@ const Login: React.FC = () => {
         dispatch(login(formData));
       }
     } catch (err) {
-      const flatErrors = err.inner.flatMap((inner: { path: string; }) => inner.path);
+      const flatErrors = (err as ValidationError).inner.flatMap((inner: { path: string; }) => inner.path);
 
       setFormErrors(oldData => ({
         ...oldData,

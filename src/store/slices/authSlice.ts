@@ -69,7 +69,7 @@ export const login = createAsyncThunk<AuthData,
       return (await response.json()) as AuthData;
     } catch (err) {
       return rejectWithValue({
-        error: err.message,
+        error: (err as Error).message,
         status: 'fail'
       })
     }
@@ -103,7 +103,7 @@ export const logout = createAsyncThunk<AuthData,
       return (await response.json()) as AuthData;
     } catch (err) {
       return rejectWithValue({
-        error: err,
+        error: (err as Error).message,
         status: 'fail'
       })
     }
